@@ -20,7 +20,7 @@ class SimpleDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             "CREATE TABLE ${Entry.TABLE_NAME} (" +
                     "${BaseColumns._ID} INTEGER PRIMARY KEY," +
                     "${Entry.COLUMN_NAME_NAME} TEXT," +
-                    "${Entry.COLUMN_NAME_RESULT} TEXT)"
+                    "${Entry.COLUMN_NAME_RESULT} INTEGER)"
         const val SQL_DELETE = "DROP TABLE IF EXISTS ${Entry.TABLE_NAME}"
     }
 
@@ -42,7 +42,7 @@ class SimpleDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         const val DATABASE_NAME = "results.db"
     }
 
-    public fun insert(result: Result){
+    fun insert(result: Result){
         // Открываем базу на запись
         val db = writableDatabase
         // Комплектуем данные для вставки
@@ -54,7 +54,7 @@ class SimpleDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db?.insert(DBContract.Entry.TABLE_NAME, null, values)
     }
 
-    public fun getAll(order: String): List<Result> {
+     fun getAll(order: String): List<Result> {
         val allRecords = mutableListOf<Result>()
         val cursor = readableDatabase.query(DBContract.Entry.TABLE_NAME, null, null,
             null, null,null, order)
