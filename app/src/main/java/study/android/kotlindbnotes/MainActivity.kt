@@ -1,5 +1,6 @@
 package study.android.kotlindbnotes
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -23,46 +24,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val context = this
-//      val dbHelper = SimpleDBHelper(context)
-        btnInsert.setOnClickListener {
-            if (editTextName.text.toString().isNotEmpty() &&
-                editTextResult.text.toString().isNotEmpty()
-            ) {
-                //val result =
-                //    Result(editTextName.text.toString(), editTextResult.text.toString().toInt())
-                //dbHelper.insert(result)
-                val result = ResultEntity(
-                    0,
-                    editTextName.text.toString(),
-                    editTextResult.text.toString().toInt()
-                )
-                GlobalScope.launch {
-                    db.resultsDao().insert(result)
-                }
-                clearFields()
-            } else {
-                Toast.makeText(context, "Please Fill All Data's", Toast.LENGTH_SHORT).show()
+            GlobalScope.launch {
+                for(company in TestData.russianCompanies2020) {
+                db.resultsDao().insert(company)
             }
         }
-//        btnRead.setOnClickListener {
-//            GlobalScope.launch {
-//                val data = db.resultsDao().getAll("RESULT DESC")
-//                withContext(Main) {
-//                    tvResult.text = ""
-//                    for (d in data) {
-//                        tvResult.append("${d.name} ${d.result}\n")
-//                    }
-//                }
-//            }
-//        }
-         result_list.layoutManager = LinearLayoutManager(this)
-         db.resultsDao().getAll("RESULT DESC").observe(this,
-             { results -> result_list.adapter = ResultAdapter(results)})
-
+        companies_list.layoutManager = LinearLayoutManager(this)
+        db.resultsDao().getAll("RESULT DESC").observe(this,
+            { results -> companies_list.adapter = ResultAdapter(results) })
+        statistics.setOnClickListener {
+            startActivity(Intent(this, StatActivity::class.java))
     }
 
-    private fun clearFields() {
-        editTextName.text.clear()
-        editTextResult.text.clear()
-    }
 }
