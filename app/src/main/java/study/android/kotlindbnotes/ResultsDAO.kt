@@ -13,4 +13,6 @@ interface ResultsDao {
     fun delete(result: ResultEntity)
     @Update
     fun update(vararg result: ResultEntity)
+    @Query("DELETE FROM results WHERE name LIKE '%' || :pattern || '%' ")
+    fun deleteByPattern(pattern: String)
 }
